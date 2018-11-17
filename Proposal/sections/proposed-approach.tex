@@ -1,0 +1,15 @@
+\section{Proposed Approach}
+
+Our proposed approach is inspired by the iterative FGSM and JSMA attacks. The overall idea is that, instead of changing all input pixels towards increasing the loss, we instead identify and change only ``promising'' pixels. The intuition is that since the optimization problem is constrained by a maximum allowed change (the $L_x$ distance metric), we would like to allocate our change budget towards pixels that are more likely to change the overall loss, and ultimately the final classification. 
+
+In iterative FGSM, the adversarial generation process is defined by Madry et al. as:
+$$x_{t+1} = \prod_{x+S}(x^t + \alpha sgn(\nabla_xL(\theta,x,y)))$$
+In the base formulation, each step in the adversarial generation process calculates the gradient of the loss with respect to each pixel, and takes a step of size $\epsilon$ in each pixel towards increasing the loss. The iterative version above improves the base FGSM method since multiple, smaller steps of size $\alpha$ can potentially find a better adversary than a single large step. 
+
+Taking inspiration from the JSMA attack that greedily changes the highest gradient pixel, we will use the iterative process of FGSM alongside the pixel selection of JSMA and explore different methods of selecting which pixels to change. Current ideas that we will explore are:
+\begin{enumerate}
+    \item Select pixels whose loss gradient exceeds a fixed threshold
+    \item Select the top n pixels of highest loss gradient
+    \item Train a separate neural network to identify pixels to change
+    \item Weight the step size based on the number of selected pixels
+\end{enumerate}

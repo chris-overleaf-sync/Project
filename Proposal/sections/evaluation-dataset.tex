@@ -1,0 +1,11 @@
+\section{Dataset and Evaluation}
+
+There are two primary design goals in adversarial machine learning: 1. designing networks that are robust to adversarial attacks and 2. designing attacks that can create adversarial examples to test a trained network. In this work, we will focus on the latter goal, creating a new attack methodology.
+
+We require a trained network to evaluate our new attack, preferably one that is already hardened against adversarial attacks. We choose a state-of-the-art defense proposed by Madry et al. \cite{madry2017towards} and will use the pretrained network that is publicly provided by them as a challenge to the adversarial machine learning community. Each network's model configuration, training configuration, and trained weights are provided.
+
+Each pretrained network that we use is trained on a given dataset. These datasets are CIFAR-10 \cite{krizhevsky2009learning} and MNIST \cite{lecun1998gradient}. CIFAR-10 is a dataset of 32x32 pixel color images hand labeled to 10 different classes of real-world objects. MNIST is a dataset of 28x28 pixel black and white images hand labeled to the 10 numeric digits (0-9). Following to the rules of the challenge, we will use the standard test sets for each dataset to create the adversarial example test set.
+
+The final evaluation metric used is as defined in the challenge. For each dataset, the test metric is the percentage of examples that the pretrained network classifies correctly, with lower accuracy indicating better attack performance. The current state of the art approaches achieve 88.79\% and 44.71\% accuracy on MNIST and CIFAR-10, respectively.
+
+In order to provide a fairer comparison of our methodology given the limited computational resources available, we will use the cleverhans \cite{GoodfellowPM16} framework to reproduce other baseline attack methodologies and compare to our results.

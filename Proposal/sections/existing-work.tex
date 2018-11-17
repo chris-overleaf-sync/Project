@@ -1,0 +1,15 @@
+\section{Existing Work}
+
+Several adversarial attacks have been designed since the original discovery of adversarial examples (Szegedy et al. \cite{szegedy2013intriguing}), some of which are included in the cleverhans adversarial attack library \cite{GoodfellowPM16}. A brief overview is listed below:
+\begin{itemize}
+    \item L-BFGS is described by Szegedy et al. \cite{szegedy2013intriguing} and is the original attack algorithm, it uses box-constrained L-BFGS optimization to find images similar under $L_2$ distance that are classified differently.
+    \item Fast Gradient Descent (FGD) described by Goodfellow et al. \cite{goodfellow6572explaining} also known as Fast Gradient Sign Method (FGSM). This uses the gradient of the output to perturb all pixels away from the gradient. This can also be used as a targetted attack by  perturbing the pixel in the direction of the gradient of any label.
+    \item Iterative FGSM (I-FGSM) described by Kurakin et al. \cite{kurakin2016adversarial} takes a step approach to FGSM, incrementally changing the pixels by small pertubations and recalculating the gradient at each step.
+    \item Projected Gradient Descent (PGD) described by Madry et al. \cite{madry2017towards} is a projected version of iterative FGSM, repeating FGSM over a test example until the desired perturbation is achieved.
+    \item Jacobian-based Saliency Map Attack (JSMA) described by Papernot et al. \cite{papernot2016limitations} uses a greedy approach to change the most significant pixel in each step until the classification is changed.
+    \item Random + FGSM is described in Tramer et al. \cite{tramer2017ensemble} where a small random vector is added prior to adding the step, in order to escape the non-smooth vicinity. To the best of our knowledge, this is the most similar attack methodology to our proposed approach.
+    
+
+\end{itemize}
+
+While several defense mechanisms have been proposed, recent work \cite{carlini2017towards} has shown that despite promising results, existing defenses only marginally improve robustness against advanced adversaries. As a result, the best approach at hardening against adversarial attacks continues to be training a model using both regular and adversarial examples \cite{madry2017towards}. Madry et al. claim that PGD is a universal first-order adversary, one that utilizes first order network information. Utilizing this information, they train a robust network using PGD to create adversarial examples and publicly released it to test its robustness.
