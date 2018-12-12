@@ -1,1 +1,41 @@
 \section{Experiments}
+\subsection{Experimental setup}
+%Describe the setup (madry defense, our model attacks)
+%Describe the dataset and test set
+In order to test our attacks, we attack the Madry et al. MNIST challenge models \cite{madry2017towards}. The Madry Lab provides 3 defense models, generic attacks including PGD described by the paper as the best universal first order attack, and standardized methods to retrieve the MNIST test data set and testing the accuracy of the models. The MNIST dataset is a set of handwritten digits from 0-9, pre-split into 60k training samples and 10k testing samples. The challenge is to alter all test images up to $\epsilon=0.3$ distance, determined using the $l_\infty$ norm, with the goal of reducing a model's accuracy.
+
+The Madry Models are composed of two convolutional layers, a relu layer, and a softmax output layer. There are three versions, one trained on natural samples, and two trained on natural samples and adversarial samples. The two trained on adversarial samples have different weights due to random initializations, though otherwise are the same. 
+
+In our evaluation we attack the adversarially trained model that was publicly available during the time of the challenge. We attack it with a white-box methodology, meaning we use the knowledge of the model's layers and weights to generate the adversarial examples.
+
+For a baseline, we run the four attacks described in the existing work, FGSM, I-FGSM, PGD, and MI-FGSM. We use the cleverhans library \cite{GoodfellowPM16}, a library made by Goodfellow and others that provides these standard adversarial attacks. For using this library, we pass in the model layers and weights and the 10k training samples and extract the modified adversarial examples. We then use the Madry Lab evaluation to determine the accuracy of the model against these generated examples. We run a small parameter search for each model around the default values or reported best values.
+
+We follow the same procedure for our model with a more extensive parameter search. Our methods are similar to the PGD attack with adjustments on how the weights are updated in each iteration.
+
+Tables:
+1. Best accuracies against the advtrained model for our model (single accuracy) and each baseline (4 baselines?). If we can, rerun on secret model using the same parameters as the advtrained to create a second line in the table.
+2. Table of hyperparameters used in our best model (and the baselines)
+
+\begin{table}
+    \begin{center}
+        \begin{tabular}{l|c|c|c|l}
+            \hline
+            Attack & Accuracy & Iterations & Step Size & Other Params\\
+            \hline
+            Baselines \\
+            \hline
+            None & 98.40 &&& \\
+            FGSM & 96.23 & 1 & 0.3 & \\\
+            I-FGSM & 93.21 & 100 & 0.01 & \\
+            PGD & 92.52 & 100 & 0.01 & random starts: 50, cross entropy loss \\
+            MI-FGSM & 92.83 & 100 & 0.1 & decay factor: 0.04 \\
+            \hline
+            PI-FGSM \\
+            \hline
+            Top Gradients & 92.39 & 64 & 0.02 & \#top grads: 512\\
+            Distributed Gradients & 93.23 & 128 & 256 & \\
+            Clipped Pixels & 92.31 & 128 & 0.04 & \#top grads: 128
+        \end{tabular}
+    \end{center}
+    \caption{\label{tab:res_table}Attack accuracy and attack parameters against the public adversarial model.}
+\end{table}

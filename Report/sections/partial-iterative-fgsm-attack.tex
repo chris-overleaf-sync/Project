@@ -1,1 +1,14 @@
 \section{Partial Iterative FGSM Attack}
+\subsection{Overview}
+We implement different iterative attacks to selectively perturb pixels by a set amount. In the base FGSM method, each step in the adversarial generation process calculates the gradient of the loss with respect to each pixel, and takes a step of size $\epsilon$ in each pixel towards increasing the loss. We use an iterative version to improve the base FGSM method since multiple, smaller steps of size $\alpha$ can potentially find a better adversary than a single large step. 
+\subsection{Top Gradients}
+For top gradients, we choose the k largest gradients of the loss function with respect to x, and perturb only those corresponding x values. This way we only change the input pixels that are likely to change the overall loss, and ultimately the final classification. The update to only the k pixels chosen is outlined as follows:
+$$x_{t+1} = x_t + \alpha sgn(\nabla_xL(\theta,x,y))$$
+
+\subsection{Distributed Gradients}
+This method changes x based on the distribution of its loss function. We first normalize the gradients based on the L2 norm, and take steps of size $\alpha$ scaled by this value.
+$$ x_{t+1} = x_t + \alpha * \frac {\nabla_xL(\theta,x,y)} {||\nabla_xL(\theta,x,y)||} $$
+
+\subsection{Clipped Pixels}
+For this attack method we choose the k largest gradients of the loss function with respect to x within allowed bounds. These bounds are $x < x + \epsilon$ for positive values of x and $x > x - \epsilon$ for negative x values. Since those values will be clipped later, we don't want to include these as the pixels to be perturbed. After filtering our allowed x values, we run the same update as top gradients:
+$$x_{t+1} = x_t + \alpha sgn(\nabla_xL(\theta,x,y))$$
