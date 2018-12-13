@@ -23,13 +23,12 @@ The results in Table \ref{tab:res_table} compare 'clipped-pixels' against baseli
 
 \begin{figure}
     \centering
-    % \includegraphics[width=6cm]{Report/sections/images/PGD_CLIP_trainingplot.png}
-    \includegraphics[width=6cm]{Report/sections/images/pikachu.jpg}
+    \includegraphics[width=6cm]{Report/sections/images/PGD_CLIP_trainingplot.png}
     \caption{PGD vs Clipped Pixels, iteratively attacking the model.}
     \label{fig:PGDvCLIP}
 \end{figure}
 
-To further explore PGD reproducibility, we attempted to understand the "random restarts" condition by as performing multiple attacks. At each attack, we only perturb images that the prior evaluation step correctly classified, and keep the adversarial images that were successfully misclassified. Since we only reperturb classified images, this strictly decreases the final accuracy. By performing these steps, we reach a final PGD accuracy of \textbf{89.46\%}, which is very similar to the reported 89.62\%. When we use this method for Clipped Pixels we get an accuracy of \TODO{fill in number here \textbf{10.00\%}}.A plot of this process showing the improvement of accuracy over iterations is shown in Figure \ref{fig:PGDvCLIP}. We find that there is marginal improvement after 50 iterations. The original paper is not clear how to reproduce their result, but we believe this is a reasonable interpretation, even though it significantly increases the runtime.
+To further explore PGD reproducibility, we attempted to understand the "random restarts" condition by as performing multiple attacks. At each attack, we only perturb images that the prior evaluation step correctly classified, and keep the adversarial images that were successfully misclassified. Since we only reperturb classified images, this strictly decreases the final accuracy. By performing these steps, we reach a final PGD accuracy of \textbf{89.46\%}, which is very similar to the reported 89.62\%. When we use this method for Clipped Pixels we get an accuracy of \textbf{89.77\%}.A plot of this process showing the improvement of accuracy over iterations is shown in Figure \ref{fig:PGDvCLIP}. We find that there is marginal improvement after 50 iterations. The original paper is not clear how to reproduce their result, but we believe this is a reasonable interpretation, even though it significantly increases the runtime.
 
 \subsection{Why do our attacks work?}
 Since the top gradients method selects pixels to update at each iteration, there exists some distribution of pixel updates over the entire attack. We plot this pixel update frequency in a heatmap, where the heatmap indicates how many times a pixel was updated during the attack on that image. An example heatmap is shown in Figure \ref{fig:heatmap}. The heatmap provides some insight into which pixels dominate the loss gradient over the entire attack. In the figure, we see an image that is successfully attacked, and while the attacked image still appears to be a 9, the heatmap indicates the attack's pixel preference to push it towards a 5 by focusing on the right half of the image. 
